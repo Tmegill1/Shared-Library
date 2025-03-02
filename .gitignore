@@ -1,6 +1,10 @@
+
+# Credentials
 credentials.json
-*.pyc
-__pycache__/
-.env
-venv/
-sheets/
+*credentials*.json
+.creds/
+*.pem
+*.key
+
+# Python
+
