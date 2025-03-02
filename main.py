@@ -13,20 +13,14 @@ scopes = [
 ]
 
 try:
-    # Check if credentials exist in environment variable
-    if 'GOOGLE_CREDENTIALS' in os.environ:
-        creds_dict = json.loads(os.environ['GOOGLE_CREDENTIALS'])
-        creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
-    else:
-        # Fallback to file, but don't commit the path
-        creds = Credentials.from_service_account_file(".creds/service_account.json", scopes=scopes)
-    
+    creds = Credentials.from_service_account_file("credentials.json", scopes=scopes)
     client = gspread.authorize(creds)
+    
     sheet_id = "1Mthh3RTYPiov3WLM-JvrV6zTI8rlaKssv0djRkw6PZE"
     workbook = client.open_by_key(sheet_id)
 
 except FileNotFoundError:
-    print("Error: Credentials not found. Please set up your credentials properly.")
+    print("Error: credentials.json file not found. Please ensure it exists in the correct location.")
     exit(1)
 except Exception as e:
     print(f"Error connecting to Google Sheets: {str(e)}")
@@ -55,6 +49,9 @@ def main():
         next_row = len(values) + 1
         
         # Update the cells in the next empty row
+        tyler_Lib.update_cell(1,1,"Title")
+        tyler_Lib.update_cell(1,2,"Author")
+        tyler_Lib.update_cell(1,3,"Rating")
         tyler_Lib.update_cell(next_row, 1, book_data['title'])
         tyler_Lib.update_cell(next_row, 2, book_data['author'])
         tyler_Lib.update_cell(next_row, 3, book_data['rating'])
