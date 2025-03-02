@@ -1,6 +1,8 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from books import books
+import os
+import json
 #import share_book
 #import ping_user
 
@@ -11,14 +13,20 @@ scopes = [
 ]
 
 try:
-    creds = Credentials.from_service_account_file("credentials.json", scopes=scopes)
-    client = gspread.authorize(creds)
+    # Check if credentials exist in environment variable
+    if 'GOOGLE_CREDENTIALS' in os.environ:
+        creds_dict = json.loads(os.environ['GOOGLE_CREDENTIALS'])
+        creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+    else:
+        # Fallback to file, but don't commit the path
+        creds = Credentials.from_service_account_file(".creds/service_account.json", scopes=scopes)
     
+    client = gspread.authorize(creds)
     sheet_id = "1Mthh3RTYPiov3WLM-JvrV6zTI8rlaKssv0djRkw6PZE"
     workbook = client.open_by_key(sheet_id)
 
 except FileNotFoundError:
-    print("Error: credentials.json file not found. Please ensure it exists in the correct location.")
+    print("Error: Credentials not found. Please set up your credentials properly.")
     exit(1)
 except Exception as e:
     print(f"Error connecting to Google Sheets: {str(e)}")

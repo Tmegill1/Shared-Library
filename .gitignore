@@ -1,6 +1,21 @@
+# Credentials
 credentials.json
+*credentials*.json
+.creds/
+*.pem
+*.key
+
+# Python
 *.pyc
 __pycache__/
 .env
 venv/
 sheets/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
